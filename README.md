@@ -1,4 +1,4 @@
-# PhrasesWithPhriends
+# Phrases With Phriends
 
 To start your Phoenix server:
 

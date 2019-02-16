@@ -20,6 +20,7 @@ defmodule PhrasesWithPhriendsWeb.Endpoint do
   end
 
   plug Plug.Logger
+  plug Plug.RequestId
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],

@@ -1,0 +1,11 @@
+<script>
+  window.gameName = "<%= @name %>";
+</script>
+<div class="row">
+  <div class="column">
+    <h1>Phrases With Phriends: <%= @name %></h1>
+    <div id="root">
+      <p>Game is loading...</p>
+    </div>
+  </div>
+</div>
