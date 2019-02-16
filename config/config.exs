@@ -5,10 +5,6 @@
 # is restricted to this project.
 use Mix.Config
 
-# General application configuration
-config :phrases_with_phriends,
-  ecto_repos: [PhrasesWithPhriends.Repo]
-
 # Configures the endpoint
 config :phrases_with_phriends, PhrasesWithPhriendsWeb.Endpoint,
   url: [host: "localhost"],
@@ -21,6 +17,9 @@ config :phrases_with_phriends, PhrasesWithPhriendsWeb.Endpoint,
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:user_id]
+
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

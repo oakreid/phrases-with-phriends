@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 
-export default function scrabble_init(root, channel) {
-  ReactDOM.render(<Scrabble channel={channel}/>, root);
+export default function phrases_init(root, channel) {
+  ReactDOM.render(<PhrasesWithPhriends channel={channel}/>, root);
 }
 
 const tileVals = {
@@ -53,16 +53,16 @@ const initialState = () => {
   }
 };
 
-class Scrabble extends React.Component {
+class PhrasesWithPhriends extends React.Component {
 
   constructor(props) {
     super(props);
     this.channel = props.channel;
     this.state = {...initialState};
-    this.channel.join().receive("ok", this.update.bind(this)).receive("error", res => { console.log("Unable to join", res)});
+    this.channel.join().receive("ok", this.fresh_state.bind(this)).receive("error", res => { console.log("Unable to join", res)});
   }
 
-  update(view) {
+  fresh_state(view) {
     this.setState(view.game);
   }
 
