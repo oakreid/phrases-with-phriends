@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 
-export default function memory_init(root, channel) {
+export default function scrabble_init(root, channel) {
   ReactDOM.render(<Scrabble channel={channel}/>, root);
 }
 
@@ -42,19 +42,24 @@ function buildTiles() {
     for (let i = 0; i < tileVals[key].count; i++)
       tiles.push(tileVals[key]);
   });
+  return tiles;
 }
 
-const initialState = {
-  players: [],
-  tiles: [],
-  board: []
+const initialState = () => {
+  return {
+    players: [],
+    tiles: buildTiles(),
+    board: []
+  }
 };
 
 class Scrabble extends React.Component {
 
   constructor(props) {
     super(props);
-
+    this.channel = props.channel;
+    this.state = {...initialState};
+    this.channel.join().receive("ok", this.update.bind(this)).receive("error", res => { console.log("Unable to join", res)});
   }
 
   update(view) {
