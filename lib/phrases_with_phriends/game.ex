@@ -1,7 +1,5 @@
 defmodule PhrasesWithPhriends.Game do
-  def reset(game) do
-    %{
-    
-    }
+  def fresh_state() do
+    %{}
   end
 end

@@ -37,7 +37,7 @@ const tileVals = {
 }
 
 function buildTiles() {
-  let tiles;
+  let tiles = [];
   Object.keys(tileVals).forEach((key) => {
     for (let i = 0; i < tileVals[key].count; i++)
       tiles.push(tileVals[key]);
@@ -58,7 +58,7 @@ class PhrasesWithPhriends extends React.Component {
   constructor(props) {
     super(props);
     this.channel = props.channel;
-    this.state = {...initialState};
+    this.state = initialState();
     this.channel.join().receive("ok", this.fresh_state.bind(this)).receive("error", res => { console.log("Unable to join", res)});
   }
 

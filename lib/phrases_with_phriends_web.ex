@@ -21,8 +21,8 @@ defmodule PhrasesWithPhriendsWeb do
     quote do
       use Phoenix.Controller, namespace: PhrasesWithPhriendsWeb
       import Plug.Conn
-      import PhrasesWithPhriendsWeb.Router.Helpers
       import PhrasesWithPhriendsWeb.Gettext
+      alias PhrasesWithPhriendsWeb.Router.Helpers, as: Routes
     end
   end
 
@@ -37,9 +37,9 @@ defmodule PhrasesWithPhriendsWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import PhrasesWithPhriendsWeb.Router.Helpers
       import PhrasesWithPhriendsWeb.ErrorHelpers
       import PhrasesWithPhriendsWeb.Gettext
+      alias PhrasesWithPhriendsWeb.Router.Helpers, as: Routes
     end
   end
 

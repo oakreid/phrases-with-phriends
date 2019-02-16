@@ -11,7 +11,7 @@ config :phrases_with_phriends, PhrasesWithPhriendsWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
+  watchers: [node: ["node_modules/webpack/bin/webpack.js", "--mode", "development", "--watch-stdin",
                     cd: Path.expand("../assets", __DIR__)]]
 
 # ## SSL Support
@@ -47,12 +47,3 @@ config :logger, :console, format: "[$level] $message\n"
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
-
-# Configure your database
-config :phrases_with_phriends, PhrasesWithPhriends.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "phrases_with_phriends_dev",
-  hostname: "localhost",
-  pool_size: 10
