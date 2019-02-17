@@ -19,31 +19,10 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
     end
   end
 
-<<<<<<< HEAD
   def handle_in("reset", payload, socket) do
     game = PhrasesWithPhriends.Game.reset(socket.assigns[:game])
     socket = assign(socket, :game, game)
     {:reply, {:ok, %{"game" => PhrasesWithPhriends.Game.client_view(game)}}, socket}
-=======
-  # Channels can be used in a request/response fashion
-  # by sending replies to requests from the client
-
-  def handle_in("submit", payload, socket) do
-    game = PhrasesWithPhriends.Game.update_submit(socket.assigns[:game], payload)
-    socket = assign(socket, :game, game)
-    others_new_state =
-      %{
-        "board" => PhrasesWithPhriends.Game.board_state(game),
-        "hand" => [] # empty hand received -> no updates to personal tiles
-      }
-    sender_new_state =
-      %{
-        "board" => PhrasesWithPhriends.Game.board_state(game),
-        "hand" => PhrasesWithPhriends.Game.hand_state(game)
-      }
-    broadcast_from(socket, :game, sender_new_state)
-    {:reply, {:ok, sender_new_state, socket}}
->>>>>>> server
   end
 
   # Add authorization logic here as required.
