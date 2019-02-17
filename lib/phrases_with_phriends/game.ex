@@ -3,6 +3,7 @@ defmodule PhrasesWithPhriends.Game do
     %{}
   end
 
+<<<<<<< HEAD
   def client_view(game) do
     %{
       players: game.players,
@@ -14,5 +15,17 @@ defmodule PhrasesWithPhriends.Game do
 
   def reset(game) do
     new_game()
+=======
+  def hand_state(game) do
+    %{}
+  end
+
+  def board_state(game) do
+    %{}
+  end
+
+  def update_submit(game, payload) do
+    %{}
+>>>>>>> server
   end
 end
