@@ -3,7 +3,7 @@ defmodule PhrasesWithPhriendsWeb.UserSocket do
 
   ## Channels
   # channel "room:*", PhrasesWithPhriendsWeb.RoomChannel
-  channel "games:*", PhrasesWithPhriends.GamesChannel
+  channel "games:*", PhrasesWithPhriendsWeb.GamesChannel
 
   ## Transports
   # transport :websocket, Phoenix.Transports.WebSocket
