@@ -1,7 +1,9 @@
 defmodule PhrasesWithPhriendsWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :phrases_with_phriends
 
-  socket "/socket", PhrasesWithPhriendsWeb.UserSocket
+  socket "/socket", PhrasesWithPhriendsWeb.UserSocket,
+    websocket: true,
+    longpoll: false
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -19,8 +21,8 @@ defmodule PhrasesWithPhriendsWeb.Endpoint do
     plug Phoenix.CodeReloader
   end
 
-  plug Plug.Logger
   plug Plug.RequestId
+  plug Plug.Logger
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
