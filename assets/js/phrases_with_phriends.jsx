@@ -52,8 +52,8 @@ function buildTiles() {
 
 function initBoard() {
   let board = [];
-  for (let col = 1; col < 16; col++) {
-    for (let row = 1; row < 16; row++) {
+  for (let row = 1; row < 16; row++) {
+    for (let col = 1; col < 16; col++) {
       board.push(<Space row={row} col={col} key={((row+col)*(row+col+1)+col)/2}/>);
     }
   }

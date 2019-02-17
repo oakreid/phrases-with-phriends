@@ -25,10 +25,10 @@ class Space extends React.Component {
       type = "2xWS";
     if ([1, 8, 15].includes(row) && [1, 8, 15].includes(col))
       type = "3xWS";
-    if (([1, 15].includes(row) && [4, 12].includes(col)) ||
+    if (([1, 8, 15].includes(row) && [4, 12].includes(col)) ||
         ([3, 13].includes(row) && [7, 9].includes(col)) ||
         ([4, 12].includes(row) && [1, 8, 15].includes(col)) ||
-        ([7, 9].includes(row) && [3, 7, 9, 12].includes(col)))
+        ([7, 9].includes(row) && [3, 7, 9, 13].includes(col)))
       type = "2xLS";
     if (([2, 14].includes(row) && [6, 10].includes(col)) ||
         ([6, 10].includes(row) && [2, 6, 10, 14].includes(col)))
