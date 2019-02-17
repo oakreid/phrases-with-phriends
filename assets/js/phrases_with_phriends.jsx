@@ -1,9 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
+import Space from './space'
 
 export default function phrases_init(root, channel) {
   ReactDOM.render(<PhrasesWithPhriends channel={channel}/>, root);
+}
+
+function nextChar(c) {
+  return String.fromCharCode(c.charCodeAt(0) + 1);
 }
 
 const tileVals = {
@@ -40,16 +45,26 @@ function buildTiles() {
   let tiles = [];
   Object.keys(tileVals).forEach((key) => {
     for (let i = 0; i < tileVals[key].count; i++)
-      tiles.push(tileVals[key]);
+      tiles.push(key);
   });
   return tiles;
+}
+
+function initBoard() {
+  let board = [];
+  for (let val = 'A'; val.charCodeAt(0) <= 'O'.charCodeAt(0); val = nextChar(val)) {
+    for (let num = 0; num < 16; num++) {
+      board.push(<Space val num type=" " key={num + val}/>);
+    }
+  }
+  return board;
 }
 
 const initialState = () => {
   return {
     players: [],
-    tiles: buildTiles(),
-    board: []
+    tiles: _.shuffle(buildTiles()),
+    board: initBoard()
   }
 };
 
@@ -68,6 +83,6 @@ class PhrasesWithPhriends extends React.Component {
 
   render() {
 
-    return <div></div>;
+    return <div className="container">{this.state.board}</div>;
   }
 }
