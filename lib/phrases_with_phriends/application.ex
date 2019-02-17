@@ -10,6 +10,7 @@ defmodule PhrasesWithPhriends.Application do
     children = [
       # Start the endpoint when the application starts
       supervisor(PhrasesWithPhriendsWeb.Endpoint, []),
+      PhrasesWithPhriends.BackupAgent
       # Start your own worker by calling: PhrasesWithPhriends.Worker.start_link(arg1, arg2, arg3)
       # worker(PhrasesWithPhriends.Worker, [arg1, arg2, arg3]),
     ]
