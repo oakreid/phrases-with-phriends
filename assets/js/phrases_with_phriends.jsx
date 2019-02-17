@@ -60,11 +60,16 @@ function initBoard() {
   return board;
 }
 
+function addPlayer() {
+
+}
+
 const initialState = () => {
   return {
     players: [],
     tiles: _.shuffle(buildTiles()),
-    board: initBoard()
+    board: initBoard(),
+    turn: 0
   }
 };
 
@@ -74,11 +79,34 @@ class PhrasesWithPhriends extends React.Component {
     super(props);
     this.channel = props.channel;
     this.state = initialState();
-    this.channel.join().receive("ok", this.fresh_state.bind(this)).receive("error", res => { console.log("Unable to join", res)});
+    this.channel.join().receive("ok", this.update.bind(this)).receive("error", res => { console.log("Unable to join", res)});
   }
 
-  fresh_state(view) {
+  update(view) {
     this.setState(view.game);
+  }
+
+  addPlayer() {
+    this.setState(prevState => ({
+      players: [...prevState.players,
+        {
+          id: prevState.players.length,
+          hand: [],
+          score: 0,
+        }
+      ]
+    }))
+  }
+
+  drawTiles(used) {
+    let { board, tiles, players: [{hand}] } = this.state;
+    for (let i = tiles.length; i < 7; i++) {
+      hand.push(tiles.pop())
+    }
+    this.setState({
+      tiles,
+      players
+    });
   }
 
   render() {
