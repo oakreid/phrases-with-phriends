@@ -52,9 +52,9 @@ function buildTiles() {
 
 function initBoard() {
   let board = [];
-  for (let val = 'A'; val.charCodeAt(0) <= 'O'.charCodeAt(0); val = nextChar(val)) {
-    for (let num = 0; num < 16; num++) {
-      board.push(<Space val num type=" " key={num + val}/>);
+  for (let col = 1; col < 16; col++) {
+    for (let row = 1; row < 16; row++) {
+      board.push(<Space row={row} col={col} key={((row+col)*(row+col+1)+col)/2}/>);
     }
   }
   return board;

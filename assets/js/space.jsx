@@ -9,19 +9,37 @@ class Space extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      num: props.num,
-      val: props.val,
-      tile: null,
-      type: props.type
+      row: props.row,
+      col: props.col,
+      tile: null
     }
   }
 
   render() {
 
+    let type = "";
+
+    const {row, col} = this.state;
+
+    if ((row === col) || (row + col === 16))
+      type = "2xWS";
+    if ([1, 8, 15].includes(row) && [1, 8, 15].includes(col))
+      type = "3xWS";
+    if (([1, 15].includes(row) && [4, 12].includes(col)) ||
+        ([3, 13].includes(row) && [7, 9].includes(col)) ||
+        ([4, 12].includes(row) && [1, 8, 15].includes(col)) ||
+        ([7, 9].includes(row) && [3, 7, 9, 12].includes(col)))
+      type = "2xLS";
+    if (([2, 14].includes(row) && [6, 10].includes(col)) ||
+        ([6, 10].includes(row) && [2, 6, 10, 14].includes(col)))
+      type = "3xLS";
+    if (row === 8 && col === 8)
+      type = "*";
+
     let color;
-    switch(this.state.type) {
+    switch(type) {
       case '2xLS':
-        color = 'light-blue';
+        color = 'lightBlue';
         break;
       case '3xLS':
         color = 'blue';
@@ -34,17 +52,23 @@ class Space extends React.Component {
         color = 'red';
         break;
       default:
-        color = 'white'
+        color = 'white';
         break;
     }
 
   return (
 		<div
 			style={{
-				color
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+				backgroundColor: color,
+        width: '40px',
+        height: '40px',
+        borderStyle: 'solid'
 			}}
 		>
-			{this.state.type}
+			{type}
 		</div>
 	)
   }

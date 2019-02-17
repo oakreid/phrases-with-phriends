@@ -9,9 +9,7 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
       |> assign(:name, name)
       sender_new_state =
         %{
-          "join" => name,
-          "board" => PhrasesWithPhriends.Game.board_state(game),
-          "hand" => PhrasesWithPhriends.Game.hand_state(game)
+          "join" => name
         }
       {:ok, sender_new_state, socket}
     else
