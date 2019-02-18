@@ -10,7 +10,10 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
       PhrasesWithPhriends.BackupAgent.put(name, game)
       sender_new_state =
         %{
-          "join" => name
+          "join" => name,
+          "board" => PhrasesWithPhriends.Game.board_state(game),
+          "players" => PhrasesWithPhriends.Game.player_state(game),
+          "game" => PhrasesWithPhriends.Game.client_view(game)
         }
       {:ok, sender_new_state, socket}
     else

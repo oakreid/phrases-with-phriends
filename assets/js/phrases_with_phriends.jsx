@@ -51,23 +51,22 @@ function initBoard() {
   return board;
 }
 
+const initialState = {
+  board: initBoard()
+}
+
 class PhrasesWithPhriends extends React.Component {
 
   constructor(props) {
     super(props);
     this.channel = props.channel;
-    this.state = {board: initBoard()}
-    this.channel.join().receive("ok", this.update.bind(this)).receive("error", res => { console.log("Unable to join", res)});
+    this.state = initialState
+    this.channel.join().receive("ok", this.set_view.bind(this)).receive("error", res => { console.log("Unable to join", res)});
   }
 
-  componentDidMount() {
-    this.setState(
-      _.assign({}, this.state, {board: initBoard()})
-    );
-  }
-
-  update(view) {
-    this.setState(view.game);
+  set_view(view) {
+    const { tiles, turn, players } = view.game;
+    this.setState(_.assign({}, this.state, { tiles, turn, players }));
   }
 
   addPlayer() {

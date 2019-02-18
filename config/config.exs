@@ -3,6 +3,11 @@
 #
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
+~w(rel plugins *.exs)
+|> Path.join()
+|> Path.wildcard()
+|> Enum.map(&Code.eval_file(&1))
+
 use Mix.Config
 
 # Configures the endpoint
