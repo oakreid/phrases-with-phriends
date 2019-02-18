@@ -43,6 +43,21 @@ defmodule PhrasesWithPhriends.Game do
     }
   end
 
+  def player_join(name, game) do
+    %{
+      players: game.players ++ [
+        %{
+          name: name,
+          hand: [],
+          score: 0
+        }
+      ],
+      tiles: game.tiles,
+      board: game.board,
+      turn: game.turn
+    }
+  end
+
   def player_state(game) do
     game.players
   end

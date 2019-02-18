@@ -10,7 +10,7 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
       PhrasesWithPhriends.BackupAgent.put(name, game)
       sender_new_state =
         %{
-          "join" => name,
+          "join" => PhrasesWithPhriends.Game.player_join(name, game),
           "board" => PhrasesWithPhriends.Game.board_state(game),
           "players" => PhrasesWithPhriends.Game.player_state(game),
           "game" => PhrasesWithPhriends.Game.client_view(game)
