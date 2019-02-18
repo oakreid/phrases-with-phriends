@@ -1,5 +1,5 @@
 defmodule PhrasesWithPhriends.Game do
-  def fresh_state() do
+  def new_game() do
     %{
       tiles: List.duplicate(' ', 2) ++
             List.duplicate('E', 12) ++
@@ -29,6 +29,7 @@ defmodule PhrasesWithPhriends.Game do
             List.duplicate('Q', 1) ++
             List.duplicate('Z', 1) |> Enum.shuffle(),
       turn: 0,
+      board: [],
       players: []
     }
   end

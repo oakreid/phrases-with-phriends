@@ -2,13 +2,8 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
   use PhrasesWithPhriendsWeb, :channel
 
   def join("games:" <> name, payload, socket) do
-<<<<<<< HEAD
-    if authorized?(payload) do
-      game = PhrasesWithPhriends.Game.new_game()
-=======
     if authorized?(name) do
       game = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.fresh_state()
->>>>>>> server
       socket = socket
       |> assign(:game, game)
       |> assign(:name, name)
@@ -23,12 +18,6 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
     end
   end
 
-<<<<<<< HEAD
-  def handle_in("reset", payload, socket) do
-    game = PhrasesWithPhriends.Game.reset(socket.assigns[:game])
-    socket = assign(socket, :game, game)
-    {:reply, {:ok, %{"game" => PhrasesWithPhriends.Game.client_view(game)}}, socket}
-=======
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
 
@@ -49,7 +38,6 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
       }
     broadcast_from(socket, :game, others_new_state)
     {:reply, {:ok, sender_new_state, socket}}
->>>>>>> server
   end
 
   # Add authorization logic here as required.
