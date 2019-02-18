@@ -51,19 +51,12 @@ function initBoard() {
   return board;
 }
 
-const initialState = {
-  players: [],
-  tiles: [],
-  board: [],
-  turn: 0
-};
-
 class PhrasesWithPhriends extends React.Component {
 
   constructor(props) {
     super(props);
     this.channel = props.channel;
-    this.state = initialState;
+    this.state = {board: initBoard()}
     this.channel.join().receive("ok", this.update.bind(this)).receive("error", res => { console.log("Unable to join", res)});
   }
 

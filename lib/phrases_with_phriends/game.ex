@@ -43,6 +43,14 @@ defmodule PhrasesWithPhriends.Game do
     }
   end
 
+  def player_state(game) do
+    game.players
+  end
+
+  def board_state(game) do
+    game.board
+  end
+
   def reset(game) do
     new_game()
   end

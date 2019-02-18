@@ -3,7 +3,7 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
 
   def join("games:" <> name, payload, socket) do
     if authorized?(name) do
-      game = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.fresh_state()
+      game = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.new_game()
       socket = socket
       |> assign(:game, game)
       |> assign(:name, name)
@@ -29,12 +29,12 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
     others_new_state =
       %{
         "board" => PhrasesWithPhriends.Game.board_state(game),
-        "hand" => [] # empty hand received -> no updates to personal tiles
+        "players" => [] # empty hand received -> no updates to personal tiles
       }
     sender_new_state =
       %{
         "board" => PhrasesWithPhriends.Game.board_state(game),
-        "hand" => PhrasesWithPhriends.Game.hand_state(game)
+        "players" => PhrasesWithPhriends.Game.player_state(game)
       }
     broadcast_from(socket, :game, others_new_state)
     {:reply, {:ok, sender_new_state, socket}}
