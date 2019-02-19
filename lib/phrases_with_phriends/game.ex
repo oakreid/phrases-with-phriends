@@ -1,7 +1,8 @@
 defmodule PhrasesWithPhriends.Game do
   def new_game() do
+    # TODO: fix initialization
     %{
-      tiles: List.duplicate(' ', 2) ++
+      tile_bag: List.duplicate(' ', 2) ++
             List.duplicate('E', 12) ++
             List.duplicate('A', 9) ++
             List.duplicate('I', 9) ++
@@ -28,30 +29,23 @@ defmodule PhrasesWithPhriends.Game do
             List.duplicate('X', 1) ++
             List.duplicate('Q', 1) ++
             List.duplicate('Z', 1) |> Enum.shuffle(),
-      turn: 0,
+      whose_turn: 1,
       board: [],
-      players: []
+      number_of_players: 0,
+      hands: [[], [], [], []],
+      scores: []
     }
   end
 
-  def client_view(game) do
+  def update_submit(game, payload) do
+    # TODO: add logic for when a player submits a word
+
     %{
-      players: game.players,
-      tiles: game.tiles,
-      board: game.board,
-      turn: game.turn
+      tile_bag: [],
+      whose_turn: 0,
+      board: [],
+      number_of_players: 0,
+      hands: [[], [], [], []],
     }
-  end
-
-  def player_state(game) do
-    game.players
-  end
-
-  def board_state(game) do
-    game.board
-  end
-
-  def reset(game) do
-    new_game()
   end
 end

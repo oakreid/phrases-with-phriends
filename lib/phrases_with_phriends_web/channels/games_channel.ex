@@ -4,13 +4,27 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
   def join("games:" <> name, payload, socket) do
     if authorized?(name) do
       game = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.new_game()
+      game.number_of_players = game.number_of_players + 1
       socket = socket
       |> assign(:game, game)
       |> assign(:name, name)
+      |> assign(:num, game.number_of_players)
       PhrasesWithPhriends.BackupAgent.put(name, game)
+      if player_num > 1 do
+        others_new_state =
+          %{
+            "scores" => game.scores
+          }
+        broadcast_from(socket, :game, others_new_state)
+      end
       sender_new_state =
         %{
-          "join" => name
+          "player_num" => socket.assigns[:num],
+          "join" => name,
+          "board" => game.board,
+          "scores" => game.scores,
+          "hand" => game.hands[socket.assigns[:num] - 1]
+          "whose_turn" => game.whose_turn
         }
       {:ok, sender_new_state, socket}
     else
@@ -23,18 +37,21 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
 
   def handle_in("submit", payload, socket) do
     name = socket.assigns[:name]
+    num = socket.assigns[:num]
     game = PhrasesWithPhriends.Game.update_submit(socket.assigns[:game], payload)
     socket = assign(socket, :game, game)
-    PhrasesWithPhriends.Game.put(name, game)
+    PhrasesWithPhriends.BackupAgent.put(name, game)
     others_new_state =
       %{
-        "board" => PhrasesWithPhriends.Game.board_state(game),
-        "players" => [] # empty hand received -> no updates to personal tiles
+        "board" => game.board,
+        "scores" => game.scores,
+        "whose_turn" => game.whose_turn
       }
     sender_new_state =
       %{
-        "board" => PhrasesWithPhriends.Game.board_state(game),
-        "players" => PhrasesWithPhriends.Game.player_state(game)
+        "scores" => game.scores,
+        "hand" => game.hands[num - 1]
+        "whose_turn" => game.whose_turn
       }
     broadcast_from(socket, :game, others_new_state)
     {:reply, {:ok, sender_new_state, socket}}
@@ -42,11 +59,7 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
 
   # Add authorization logic here as required.
   defp authorized?(name) do
-    if PhrasesWithPhriends.BackupAgent.get(name)[:number_of_players] == nil
-    || PhrasesWithPhriends.BackupAgent.get(name)[:number_of_players] < 4 do
-      true
-    else
-      false
-    end
+    PhrasesWithPhriends.BackupAgent.get(name)[:number_of_players] == nil
+    || PhrasesWithPhriends.BackupAgent.get(name)[:number_of_players] < 4
   end
 end
