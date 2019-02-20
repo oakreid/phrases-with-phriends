@@ -6,13 +6,13 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
       game = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.new_game()
       game = Map.put(game, :number_of_players, game[:number_of_players] + 1)
       num = game[:number_of_players]
-      hand = Enum.take(game[:tile_bag], 7)
-      game = Map.put(game, :tile_bag, Enum.slice(game[:tile_bag], 0, 7))
+      hand = Enum.slice(game[:tile_bag], 0, 7)
+      game = Map.put(game, :tile_bag, Enum.slice(game[:tile_bag], 7, 999999))
       hands =
         if num == 1 do
           [hand]
         else
-          game[:hands] ++ hand
+          game[:hands] ++ [hand]
         end
       game = Map.put(game, :hands, hands)
       socket = socket
