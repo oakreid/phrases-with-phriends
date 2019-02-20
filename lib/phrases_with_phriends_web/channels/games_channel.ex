@@ -3,14 +3,14 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
 
   def join("games:" <> name, payload, socket) do
     if authorized?(name) do
-      game = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.new_game()
-      game.number_of_players = game.number_of_players + 1
+      temp = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.new_game()
+      game = Map.put(temp, :number_of_players, temp[:number_of_players] + 1)
       socket = socket
       |> assign(:game, game)
       |> assign(:name, name)
       |> assign(:num, game.number_of_players)
       PhrasesWithPhriends.BackupAgent.put(name, game)
-      if player_num > 1 do
+      if socket.assigns[:num] > 1 do
         others_new_state =
           %{
             "scores" => game.scores
@@ -23,7 +23,7 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
           "join" => name,
           "board" => game.board,
           "scores" => game.scores,
-          "hand" => game.hands[socket.assigns[:num] - 1]
+          "hand" => game.hands[socket.assigns[:num] - 1],
           "whose_turn" => game.whose_turn
         }
       {:ok, sender_new_state, socket}
@@ -38,7 +38,7 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
   def handle_in("submit", payload, socket) do
     name = socket.assigns[:name]
     num = socket.assigns[:num]
-    game = PhrasesWithPhriends.Game.update_submit(socket.assigns[:game], payload)
+    game = PhrasesWithPhriends.Game.update_submit(socket.assigns[:game], payload, num)
     socket = assign(socket, :game, game)
     PhrasesWithPhriends.BackupAgent.put(name, game)
     others_new_state =
@@ -50,7 +50,7 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
     sender_new_state =
       %{
         "scores" => game.scores,
-        "hand" => game.hands[num - 1]
+        "hand" => game.hands[num - 1],
         "whose_turn" => game.whose_turn
       }
     broadcast_from(socket, :game, others_new_state)

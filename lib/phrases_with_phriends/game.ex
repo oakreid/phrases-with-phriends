@@ -37,7 +37,7 @@ defmodule PhrasesWithPhriends.Game do
     }
   end
 
-  def update_submit(game, payload) do
+  def update_submit(game, payload, player_num) do
     # TODO: add logic for when a player submits a word
 
     %{
