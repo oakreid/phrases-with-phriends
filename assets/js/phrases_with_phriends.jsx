@@ -41,6 +41,10 @@ const tileVals = {
   'Z': 10,
 }
 
+const initialState = {
+  board: []
+}
+
 class PhrasesWithPhriends extends React.Component {
 
   constructor(props) {
@@ -51,36 +55,26 @@ class PhrasesWithPhriends extends React.Component {
 
   set_view(view) {
     const { scores, turn, players, board } = view.game;
-    this.setState(_.assign({}, this.state, { tiles, turn, players, board }));
-  }
-
-  drawTiles(used) {
-    let { board, tiles, players: [{hand}] } = this.state;
-    for (let i = tiles.length; i < 7; i++) {
-      hand.push(tiles.pop())
-    }
-    this.setState({
-      tiles,
-      player,
-      scores,
-      board
-    });
+    this.setState(_.assign({}, this.state, { turn, player, board, scores }));
   }
 
   drawBoard() {
-    let board = this.state.board;
-    for (let row = 1; row < 16; row++) {
-      for (let col = 1; col < 16; col++) {
-        board.push(<Space row={row} col={col} tile={null} key={((row+col)*(row+col+1)+col)/2}/>);
-      }
-    }
-    return board;
+    let { board } = this.state;
+
+    // for (let  = 0; row < board.length; row++) {
+    //   for (let col = 1; col < 16; col++) {
+    //     board.push(<Space row={row} col={col} tile={null} key={((row+col)*(row+col+1)+col)/2}/>);
+    //   }
+    // }
+    return board.map((tile, i) => {
+      <Space row={(i+1)%15} col={(i+1)/15} tile={tile} key={i}/>
+    });
   }
 
 
 
   render() {
 
-    return <div className="container">{drawBoard()}</div>;
+    return <div className="container">{this.drawBoard()}</div>;
   }
 }

@@ -22,13 +22,13 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
       PhrasesWithPhriends.BackupAgent.put(name, game)
       sender_new_state =
         %{
-          "player" => %{
-            "number" =>  num,
-            "hand" => hand
+          player: %{
+            number: num,
+            hand: hand
           },
-          "board" => game.board,
-          "scores" => game.scores,
-          "turn" => game.turn
+          board: game.board,
+          scores: game.scores,
+          turn: game.turn
         }
       {:ok, sender_new_state, socket}
     else
@@ -47,18 +47,18 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
     PhrasesWithPhriends.BackupAgent.put(name, game)
     others_new_state =
       %{
-        "board" => game.board,
-        "scores" => game.scores,
-        "turn" => game.whose_turn
+        board: game.board,
+        scores: game.scores,
+        turn: game.whose_turn
       }
     sender_new_state =
       %{
-        "player" => %{
-          "number" => num,
-          "hand" => game.hands[num - 1]
+        player: %{
+          number: num,
+          hand: game.hands[num - 1]
         },
-        "scores" => game.scores,
-        "turn" => game.whose_turn
+        scores: game.scores,
+        turn: game.whose_turn
       }
     broadcast_from(socket, :game, others_new_state)
     {:reply, {:ok, sender_new_state, socket}}

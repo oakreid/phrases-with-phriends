@@ -37,6 +37,15 @@ defmodule PhrasesWithPhriends.Game do
     }
   end
 
+  def client_view(game) do
+    %{
+      board: game.board,
+      player: game.player,
+      turn: game.turn,
+      scores: game.scores
+    }
+  end
+
   def update_submit(game, payload, player_num) do
     new_turn =
       if player_num == 4 do
