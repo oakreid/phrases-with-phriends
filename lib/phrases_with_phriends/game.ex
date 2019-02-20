@@ -30,7 +30,7 @@ defmodule PhrasesWithPhriends.Game do
             List.duplicate('Q', 1) ++
             List.duplicate('Z', 1) |> Enum.shuffle(),
       turn: 1,
-      board: List.duplicate(nil, 255),
+      board: List.duplicate(nil, 225),
       number_of_players: 0,
       hands: [],
       scores: [0, 0, 0, 0]

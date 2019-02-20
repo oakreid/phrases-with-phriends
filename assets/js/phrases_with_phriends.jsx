@@ -11,6 +11,8 @@ function nextChar(c) {
   return String.fromCharCode(c.charCodeAt(0) + 1);
 }
 
+let hasBeenJoined = false;
+
 const tileVals = {
   ' ': 0,
   'E': 1,
@@ -50,13 +52,18 @@ class PhrasesWithPhriends extends React.Component {
   constructor(props) {
     super(props);
     this.channel = props.channel;
-    this.channel.join().receive("ok", this.set_view.bind(this)).receive("error", res => { console.log("Unable to join", res)});
+    this.state = initialState;
+    if (!hasBeenJoined) {
+      hasBeenJoined = true;
+      this.channel.join().receive("ok", this.set_view.bind(this)).receive("error", res => { console.log("Unable to join", res)});
+    }
   }
 
   set_view(view) {
-    const { scores, turn, players, board } = view.game;
-    this.setState(_.assign({}, this.state, { turn, player, board, scores }));
+    this.setState(view);
   }
+
+
 
   drawBoard() {
     let { board } = this.state;
@@ -66,9 +73,9 @@ class PhrasesWithPhriends extends React.Component {
     //     board.push(<Space row={row} col={col} tile={null} key={((row+col)*(row+col+1)+col)/2}/>);
     //   }
     // }
-    return board.map((tile, i) => {
-      <Space row={(i+1)%15} col={(i+1)/15} tile={tile} key={i}/>
-    });
+    return board.map((tile, i) =>
+      <Space row={Math.floor(i/15) + 1} col={(i%15) + 1} tile={tile} key={i}/>
+    );
   }
 
 
