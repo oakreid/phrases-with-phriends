@@ -41,7 +41,7 @@ defmodule PhrasesWithPhriends.Game do
   def update_submit(game, payload, player_num) do
     new_turn = progress_turn(game, player_num)
 
-    new_player_score = Enum.fetch(game[:scores], player_num) + payload[:word_value]
+    new_player_score = Enum.at(game[:scores], player_num) + payload[:word_value]
     new_scores = List.replace_at(game[:scores], player_num, new_player_score)
 
     amt_missing_from_hand = 7 - length(payload[:hand])
@@ -61,7 +61,7 @@ defmodule PhrasesWithPhriends.Game do
   end
 
   def update_disconnect(game, num) do
-    new_tile_bag = game[:tile_bag] ++ Enum.fetch(game[:hands], num) |> Enum.shuffle()
+    new_tile_bag = game[:tile_bag] ++ Enum.at(game[:hands], num) |> Enum.shuffle()
     new_connected_players = List.replace_at(game[:connected_players], num, false)
     new_turn =
       if game[:turn] == num do
