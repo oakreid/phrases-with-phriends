@@ -17,24 +17,29 @@ class Space extends React.Component {
 
   render() {
 
-    let type = "";
+    const {row, col, tile} = this.state;
 
-    const {row, col} = this.state;
+    let type = ""
 
-    if ((row === col) || (row + col === 16))
-      type = "2xWS";
-    if ([1, 8, 15].includes(row) && [1, 8, 15].includes(col))
-      type = "3xWS";
-    if (([1, 8, 15].includes(row) && [4, 12].includes(col)) ||
-        ([3, 13].includes(row) && [7, 9].includes(col)) ||
-        ([4, 12].includes(row) && [1, 8, 15].includes(col)) ||
-        ([7, 9].includes(row) && [3, 7, 9, 13].includes(col)))
-      type = "2xLS";
-    if (([2, 14].includes(row) && [6, 10].includes(col)) ||
-        ([6, 10].includes(row) && [2, 6, 10, 14].includes(col)))
-      type = "3xLS";
-    if (row === 8 && col === 8)
-      type = "*";
+    if (tile)
+      type = tile;
+
+    else {
+      if ((row === col) || (row + col === 16))
+        type = "2xWS";
+      if ([1, 8, 15].includes(row) && [1, 8, 15].includes(col))
+        type = "3xWS";
+      if (([1, 8, 15].includes(row) && [4, 12].includes(col)) ||
+          ([3, 13].includes(row) && [7, 9].includes(col)) ||
+          ([4, 12].includes(row) && [1, 8, 15].includes(col)) ||
+          ([7, 9].includes(row) && [3, 7, 9, 13].includes(col)))
+        type = "2xLS";
+      if (([2, 14].includes(row) && [6, 10].includes(col)) ||
+          ([6, 10].includes(row) && [2, 6, 10, 14].includes(col)))
+        type = "3xLS";
+      if (row === 8 && col === 8)
+        type = "*";
+    }
 
     let color;
     switch(type) {
@@ -51,8 +56,11 @@ class Space extends React.Component {
       case '3xWS':
         color = 'red';
         break;
-      default:
+      case "":
         color = 'white';
+        break;
+      default:
+        color = 'yellow';
         break;
     }
 

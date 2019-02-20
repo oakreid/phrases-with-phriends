@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import Space from './space'
+import Hand from './hand'
 
 export default function phrases_init(root, channel) {
   ReactDOM.render(<PhrasesWithPhriends channel={channel}/>, root);
@@ -43,16 +44,11 @@ const tileVals = {
   'Z': 10,
 }
 
-const initialState = {
-  board: []
-}
-
 class PhrasesWithPhriends extends React.Component {
 
   constructor(props) {
     super(props);
     this.channel = props.channel;
-    this.state = initialState;
     if (!hasBeenJoined) {
       hasBeenJoined = true;
       this.channel.join().receive("ok", this.set_view.bind(this)).receive("error", res => { console.log("Unable to join", res)});
@@ -82,6 +78,12 @@ class PhrasesWithPhriends extends React.Component {
 
   render() {
 
-    return <div className="container">{this.drawBoard()}</div>;
+    return (this.state ?
+      <div>
+        <div className="container">{this.drawBoard()}</div>
+        <Hand tiles={this.state.player.hand} />
+      </div> :
+      <div/>
+    );
   }
 }

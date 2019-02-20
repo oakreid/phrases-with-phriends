@@ -4,9 +4,12 @@
   grid-template-columns: repeat(15, 1fr);
 }
 
-.space {
-  width: '50px';
-  height: '50px';
-  border-style: 'solid';
-  border-color: 'black';
+.tile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: yellow;
+  width: 40px;
+  height: 40px;
+  border-style: solid;
 }
