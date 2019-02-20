@@ -1,6 +1,9 @@
 # Phrases with Phriends API
 
 ### ---Join request via "games:name"---
+#### Server Expects:
+{} <empty payload>
+
 #### Server Replies (to the player that just joined):
 {  
 	player:  
@@ -36,6 +39,19 @@
 #### Server Broadcasts (to the rest of the players):
 {  
 	board: <list of string(?), new board state with the word that the submitter added>,  
-	scores: <list of int, player scores in sequential order (i.e. player 1 score in index 0,   player 2 score in index 1, etc.)>,  
+	scores: <list of int, player scores in sequential order (i.e. player 1 score in index 0, player 2 score in index 1, etc.)>,  
 	whose\_turn: <int, the number of the player whose turn it is now>  
+}  
+
+### ---Disconnect request via "disconnect"---
+#### Server Expects:
+{} <empty payload>  
+
+#### Server Replies:
+{} <empty payload>  
+
+#### Server Broadcasts (to all players except the one that disconnected):
+{  
+	scores: <list of int, player scores in sequential order (i.e. player 1 score in index 0, player 2 score in index 1, etc.)>,    
+	turn: whose\_turn: <int, the number of the player whose turn it is now, just in case it was the turn of the player who disconnected>  
 }  

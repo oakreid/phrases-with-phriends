@@ -33,26 +33,13 @@ defmodule PhrasesWithPhriends.Game do
       board: List.duplicate(nil, 225),
       number_of_players: 0,
       hands: [],
-      scores: [0, 0, 0, 0]
-    }
-  end
-
-  def client_view(game) do
-    %{
-      board: game.board,
-      player: game.player,
-      turn: game.turn,
-      scores: game.scores
+      scores: [0, 0, 0, 0],
+      connected_players: [true, false, false, false]
     }
   end
 
   def update_submit(game, payload, player_num) do
-    new_turn =
-      if player_num == 3 do
-        0
-      else
-        player_num + 1
-      end
+    new_turn = progress_turn(game, player_num)
 
     new_player_score = Enum.fetch(game[:scores], player_num) + payload[:word_value]
     new_scores = List.insert_at(game[:scores], player_num, new_player_score)
@@ -68,7 +55,48 @@ defmodule PhrasesWithPhriends.Game do
       board: payload[:new_board],
       number_of_players: game[:number_of_players],
       hands: new_hands,
-      scores: new_scores
+      scores: new_scores,
+      connected_players: game[:connected_players]
     }
+  end
+
+  def update_disconnect(game, num) do
+    new_tile_bag = game[:tile_bag] ++ Enum.fetch(game[:hands], num) |> Enum.shuffle()
+    new_connected_players = List.insert_at(game[:connected_players], num, false)
+    new_turn =
+      if game[:turn] == num do
+        progress_turn(Map.put(game, :connected_players, new_connected_players), num)
+      else
+        game[:turn]
+      end
+
+    %{
+      tile_bag: new_tile_bag,
+      turn: new_turn,
+      board: game[:board],
+      number_of_players: game[:number_of_players],
+      hands: List.insert_at(game[:hands], num, []),
+      scores: List.insert_at(game[:scores], num, 0),
+      connected_players: new_connected_players
+    }
+  end
+
+  defp progress_turn(game, num) do
+    num_connected_players = List.foldl(game[:connected_players], 0, fn x, acc -> if x do acc + 1 end end)
+    if num_connected_players == 0 do
+      -1
+    else
+      next_player =
+        if num >= 3 do
+          0
+        else
+          num + 1
+        end
+      if Enum.at(game[:connected_players], next_player) do
+        next_player
+      else
+        progress_turn(game, next_player)
+      end
+    end
   end
 end
