@@ -42,11 +42,11 @@ defmodule PhrasesWithPhriends.Game do
     new_turn = progress_turn(game, player_num)
 
     new_player_score = Enum.fetch(game[:scores], player_num) + payload[:word_value]
-    new_scores = List.insert_at(game[:scores], player_num, new_player_score)
+    new_scores = List.replace_at(game[:scores], player_num, new_player_score)
 
     amt_missing_from_hand = 7 - length(payload[:hand])
     new_hand = Enum.slice(game[:tile_bag], 0, amt_missing_from_hand)
-    new_hands = List.insert_at(game[:hands], player_num, new_hand)
+    new_hands = List.replace_at(game[:hands], player_num, new_hand)
     new_tile_bag = Enum.slice(game[:tile_bag], amt_missing_from_hand, 999999)
 
     %{
@@ -62,7 +62,7 @@ defmodule PhrasesWithPhriends.Game do
 
   def update_disconnect(game, num) do
     new_tile_bag = game[:tile_bag] ++ Enum.fetch(game[:hands], num) |> Enum.shuffle()
-    new_connected_players = List.insert_at(game[:connected_players], num, false)
+    new_connected_players = List.replace_at(game[:connected_players], num, false)
     new_turn =
       if game[:turn] == num do
         progress_turn(Map.put(game, :connected_players, new_connected_players), num)
@@ -75,8 +75,8 @@ defmodule PhrasesWithPhriends.Game do
       turn: new_turn,
       board: game[:board],
       number_of_players: game[:number_of_players],
-      hands: List.insert_at(game[:hands], num, []),
-      scores: List.insert_at(game[:scores], num, 0),
+      hands: List.replace_at(game[:hands], num, []),
+      scores: List.replace_at(game[:scores], num, 0),
       connected_players: new_connected_players
     }
   end
