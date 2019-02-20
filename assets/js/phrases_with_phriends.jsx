@@ -41,44 +41,17 @@ const tileVals = {
   'Z': 10,
 }
 
-function initBoard() {
-  let board = [];
-  for (let row = 1; row < 16; row++) {
-    for (let col = 1; col < 16; col++) {
-      board.push(<Space row={row} col={col} key={((row+col)*(row+col+1)+col)/2}/>);
-    }
-  }
-  return board;
-}
-
-const initialState = {
-  board: initBoard()
-}
-
 class PhrasesWithPhriends extends React.Component {
 
   constructor(props) {
     super(props);
     this.channel = props.channel;
-    this.state = initialState
     this.channel.join().receive("ok", this.set_view.bind(this)).receive("error", res => { console.log("Unable to join", res)});
   }
 
   set_view(view) {
-    const { tiles, turn, players } = view.game;
-    this.setState(_.assign({}, this.state, { tiles, turn, players }));
-  }
-
-  addPlayer() {
-    this.setState(prevState => ({
-      players: [...prevState.players,
-        {
-          id: prevState.players.length,
-          hand: [],
-          score: 0,
-        }
-      ]
-    }))
+    const { scores, turn, players, board } = view.game;
+    this.setState(_.assign({}, this.state, { tiles, turn, players, board }));
   }
 
   drawTiles(used) {
@@ -88,12 +61,26 @@ class PhrasesWithPhriends extends React.Component {
     }
     this.setState({
       tiles,
-      players
+      player,
+      scores,
+      board
     });
   }
 
+  drawBoard() {
+    let board = this.state.board;
+    for (let row = 1; row < 16; row++) {
+      for (let col = 1; col < 16; col++) {
+        board.push(<Space row={row} col={col} tile={null} key={((row+col)*(row+col+1)+col)/2}/>);
+      }
+    }
+    return board;
+  }
+
+
+
   render() {
 
-    return <div className="container">{this.state.board}</div>;
+    return <div className="container">{drawBoard()}</div>;
   }
 }

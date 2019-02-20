@@ -11,7 +11,7 @@ class Space extends React.Component {
     this.state = {
       row: props.row,
       col: props.col,
-      tile: null
+      tile: props.tile
     }
   }
 
