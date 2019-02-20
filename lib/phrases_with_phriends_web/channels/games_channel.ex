@@ -4,16 +4,31 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
   def join("games:" <> name, payload, socket) do
     if authorized?(name) do
       game = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.new_game()
+      game = Map.put(game, :number_of_players, game[:number_of_players] + 1)
+      num = game[:number_of_players]
+      hand = Enum.slice(game[:tile_bag], 0, 7)
+      game = Map.put(game, :tile_bag, Enum.slice(game[:tile_bag], 7, 999999))
+      hands =
+        if num == 1 do
+          [hand]
+        else
+          game[:hands] ++ [hand]
+        end
+      game = Map.put(game, :hands, hands)
       socket = socket
       |> assign(:game, game)
       |> assign(:name, name)
+      |> assign(:num, num)
       PhrasesWithPhriends.BackupAgent.put(name, game)
       sender_new_state =
         %{
-          "join" => PhrasesWithPhriends.Game.player_join(name, game),
-          "board" => PhrasesWithPhriends.Game.board_state(game),
-          "players" => PhrasesWithPhriends.Game.player_state(game),
-          "game" => PhrasesWithPhriends.Game.client_view(game)
+          "player" => %{
+            "number" =>  num,
+            "hand" => hand
+          },
+          "board" => game.board,
+          "scores" => game.scores,
+          "turn" => game.turn
         }
       {:ok, sender_new_state, socket}
     else
@@ -26,18 +41,24 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
 
   def handle_in("submit", payload, socket) do
     name = socket.assigns[:name]
-    game = PhrasesWithPhriends.Game.update_submit(socket.assigns[:game], payload)
+    num = socket.assigns[:num]
+    game = PhrasesWithPhriends.Game.update_submit(socket.assigns[:game], payload, num)
     socket = assign(socket, :game, game)
-    PhrasesWithPhriends.Game.put(name, game)
+    PhrasesWithPhriends.BackupAgent.put(name, game)
     others_new_state =
       %{
-        "board" => PhrasesWithPhriends.Game.board_state(game),
-        "players" => [] # empty hand received -> no updates to personal tiles
+        "board" => game.board,
+        "scores" => game.scores,
+        "turn" => game.whose_turn
       }
     sender_new_state =
       %{
-        "board" => PhrasesWithPhriends.Game.board_state(game),
-        "players" => PhrasesWithPhriends.Game.player_state(game)
+        "player" => %{
+          "number" => num,
+          "hand" => game.hands[num - 1]
+        },
+        "scores" => game.scores,
+        "turn" => game.whose_turn
       }
     broadcast_from(socket, :game, others_new_state)
     {:reply, {:ok, sender_new_state, socket}}
@@ -45,11 +66,7 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
 
   # Add authorization logic here as required.
   defp authorized?(name) do
-    if PhrasesWithPhriends.BackupAgent.get(name)[:number_of_players] == nil
-    || PhrasesWithPhriends.BackupAgent.get(name)[:number_of_players] < 4 do
-      true
-    else
-      false
-    end
+    PhrasesWithPhriends.BackupAgent.get(name)[:number_of_players] == nil
+    || PhrasesWithPhriends.BackupAgent.get(name)[:number_of_players] < 4
   end
 end
