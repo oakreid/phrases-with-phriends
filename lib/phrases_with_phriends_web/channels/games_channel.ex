@@ -17,7 +17,6 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
           game[:hands] ++ [hand]
         end
       game = Map.put(game, :hands, hands)
-      require IEx ; IEx.pry()
       socket = socket
       |> assign(:game, game)
       |> assign(:name, name)
