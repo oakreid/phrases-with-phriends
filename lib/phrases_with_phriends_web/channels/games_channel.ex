@@ -3,28 +3,32 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
 
   def join("games:" <> name, payload, socket) do
     if authorized?(name) do
-      temp = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.new_game()
-      game = Map.put(temp, :number_of_players, temp[:number_of_players] + 1)
+      game = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.new_game()
+      game = Map.put(game, :number_of_players, game[:number_of_players] + 1)
+      num = game[:number_of_players]
+      hand = Enum.take(game[:tile_bag], 7)
+      game = Map.put(game, :tile_bag, Enum.slice(game[:tile_bag], 0, 7))
+      hands =
+        if num == 1 do
+          [hand]
+        else
+          game[:hands] ++ hand
+        end
+      game = Map.put(game, :hands, hands)
       socket = socket
       |> assign(:game, game)
       |> assign(:name, name)
-      |> assign(:num, game.number_of_players)
+      |> assign(:num, num)
       PhrasesWithPhriends.BackupAgent.put(name, game)
-      if socket.assigns[:num] > 1 do
-        others_new_state =
-          %{
-            "scores" => game.scores
-          }
-        broadcast_from(socket, :game, others_new_state)
-      end
       sender_new_state =
         %{
-          "player_num" => socket.assigns[:num],
-          "join" => name,
+          "player" => %{
+            "number" =>  num,
+            "hand" => hand
+          },
           "board" => game.board,
           "scores" => game.scores,
-          "hand" => game.hands[socket.assigns[:num] - 1],
-          "whose_turn" => game.whose_turn
+          "turn" => game.turn
         }
       {:ok, sender_new_state, socket}
     else
@@ -45,13 +49,16 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
       %{
         "board" => game.board,
         "scores" => game.scores,
-        "whose_turn" => game.whose_turn
+        "turn" => game.whose_turn
       }
     sender_new_state =
       %{
+        "player" => %{
+          "number" => num,
+          "hand" => game.hands[num - 1]
+        },
         "scores" => game.scores,
-        "hand" => game.hands[num - 1],
-        "whose_turn" => game.whose_turn
+        "turn" => game.whose_turn
       }
     broadcast_from(socket, :game, others_new_state)
     {:reply, {:ok, sender_new_state, socket}}

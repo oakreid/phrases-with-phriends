@@ -1,6 +1,5 @@
 defmodule PhrasesWithPhriends.Game do
   def new_game() do
-    # TODO: fix initialization
     %{
       tile_bag: List.duplicate(' ', 2) ++
             List.duplicate('E', 12) ++
@@ -29,11 +28,11 @@ defmodule PhrasesWithPhriends.Game do
             List.duplicate('X', 1) ++
             List.duplicate('Q', 1) ++
             List.duplicate('Z', 1) |> Enum.shuffle(),
-      whose_turn: 1,
-      board: [],
+      turn: 1,
+      board: List.duplicate(nil, 255),
       number_of_players: 0,
-      hands: [[], [], [], []],
-      scores: []
+      hands: [],
+      scores: [0, 0, 0, 0]
     }
   end
 
@@ -42,10 +41,11 @@ defmodule PhrasesWithPhriends.Game do
 
     %{
       tile_bag: [],
-      whose_turn: 0,
+      turn: 0,
       board: [],
       number_of_players: 0,
       hands: [[], [], [], []],
+      scores: []
     }
   end
 end
