@@ -5,11 +5,11 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
     if authorized?(name) do
       game = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.new_game()
       game = Map.put(game, :number_of_players, game[:number_of_players] + 1)
-      num = game[:number_of_players]
+      num = game[:number_of_players] - 1
       hand = Enum.slice(game[:tile_bag], 0, 7)
       game = Map.put(game, :tile_bag, Enum.slice(game[:tile_bag], 7, 999999))
       hands =
-        if num == 1 do
+        if num == 0 do
           [hand]
         else
           game[:hands] ++ [hand]
@@ -55,12 +55,12 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
       %{
         player: %{
           number: num,
-          hand: game.hands[num - 1]
+          hand: game.hands[num]
         },
         scores: game.scores,
         turn: game.whose_turn
       }
-    broadcast_from(socket, :game, others_new_state)
+    broadcast_from(socket, "other_submit", others_new_state)
     {:reply, {:ok, sender_new_state, socket}}
   end
 

@@ -29,7 +29,7 @@ defmodule PhrasesWithPhriends.Game do
             List.duplicate('X', 1) ++
             List.duplicate('Q', 1) ++
             List.duplicate('Z', 1) |> Enum.shuffle(),
-      turn: 1,
+      turn: 0,
       board: List.duplicate(nil, 225),
       number_of_players: 0,
       hands: [],
@@ -48,18 +48,18 @@ defmodule PhrasesWithPhriends.Game do
 
   def update_submit(game, payload, player_num) do
     new_turn =
-      if player_num == 4 do
+      if player_num == 3 do
         0
       else
         player_num + 1
       end
 
-    new_player_score = Enum.fetch(game[:scores], player_num - 1) + payload[:word_value]
-    new_scores = List.insert_at(game[:scores], player_num - 1, new_player_score)
+    new_player_score = Enum.fetch(game[:scores], player_num) + payload[:word_value]
+    new_scores = List.insert_at(game[:scores], player_num, new_player_score)
 
     amt_missing_from_hand = 7 - length(payload[:hand])
     new_hand = Enum.slice(game[:tile_bag], 0, amt_missing_from_hand)
-    new_hands = List.insert_at(game[:hands], player_num - 1, new_hand)
+    new_hands = List.insert_at(game[:hands], player_num, new_hand)
     new_tile_bag = Enum.slice(game[:tile_bag], amt_missing_from_hand, 999999)
 
     %{
