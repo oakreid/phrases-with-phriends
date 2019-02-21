@@ -8,7 +8,7 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
       num = game[:number_of_players] - 1
       hand = Enum.slice(game[:tile_bag], 0, 7)
       game = Map.put(game, :tile_bag, Enum.slice(game[:tile_bag], 7, 999999))
-      new_connected_players = List.insert_at(game[:connected_players], num, true)
+      new_connected_players = List.replace_at(game[:connected_players], num, true)
       game = Map.put(game, :connected_players, new_connected_players)
       hands =
         if num == 0 do
