@@ -10,7 +10,7 @@ const initialState = {
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case 'UPDATE_BOARD':
-      let board = state.board.slice();
+      let { board } = state;
       board[state.space] = state.tile;
       return {
         ...state,

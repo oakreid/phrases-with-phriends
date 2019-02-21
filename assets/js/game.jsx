@@ -51,7 +51,7 @@ class Game extends React.Component {
               board={board}
               tile={tile}
               space={i}
-              key={i}/>
+              key={i} />
     );
   }
 

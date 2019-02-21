@@ -8,6 +8,24 @@ import rootReducer from './redux/reducers';
 
 const store = createStore(rootReducer);
 
+Array.prototype.reshape = function(rows, cols) {
+  var copy = this.slice(0); // Copy all elements.
+  var col = [];
+
+  for (var r = 0; r < rows; r++) {
+    var row = [];
+    for (var c = 0; c < cols; c++) {
+      var i = r * cols + c;
+      if (i < copy.length) {
+        row.push(copy[i]);
+      }
+    }
+    col.push(row);
+  }
+
+  return col;
+};
+
 export default function phrases_init(root, channel) {
   ReactDOM.render(
     <Provider store={store}>
@@ -27,6 +45,7 @@ class PhrasesWithPhriends extends React.Component {
     this.state = {
       board: []
     };
+    this.grid = [];
     if (!hasBeenJoined) {
       hasBeenJoined = true;
       this.channel.join().receive("ok", this.set_view.bind(this)).receive("error", res => { console.log("Unable to join", res)});
@@ -47,21 +66,22 @@ class PhrasesWithPhriends extends React.Component {
       player,
       scores,
       turn
-    })
+    });
   }
 
   handleDrop() {
     this.props.updateBoard(this.state.board);
 
-    console.log(store.getState().reducer.board);
+    const { board } = store.getState().reducer
 
     this.setState({
-      board: store.getState().reducer.board
+      board
     });
+
+    this.grid = board.reshape(15, 15);
   }
 
   render() {
-    console.log(this.state);
     if (this.state.board.length > 0) {
       let { board, scores, player, turn } = this.state;
       return (
@@ -73,7 +93,7 @@ class PhrasesWithPhriends extends React.Component {
             turn={turn}
             channel={this.channel}
             onDrop={this.handleDrop.bind(this, board)}
-            />
+          />
         </div>
       );
     } else {
