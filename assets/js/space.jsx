@@ -1,23 +1,57 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
+import {
+	DropTarget
+} from 'react-dnd';
+import {connect} from 'react-redux';
+import {currSpace} from './redux/actions';
+
+
+const spaceTarget = {
+  // canDrop(props) {
+  //   return true;
+  // },
+
+  drop(props) {
+    props.currSpace(props.space);
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    canDrop: monitor.canDrop(),
+    isOver: monitor.isOver()
+  };
+}
 
 
 
 class Space extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      row: props.row,
-      col: props.col,
-      tile: props.tile
-    }
+  renderOverlay(color) {
+    return (
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        height: '100%',
+        width: '100%',
+        zIndex: 1,
+        opacity: 0.5,
+        backgroundColor: color,
+      }} />
+    );
   }
 
   render() {
+    const {
+			canDrop,
+			connectDropTarget
+		} = this.props
 
-    const {row, col, tile} = this.state;
+    const {row, col, tile} = this.props;
 
     let type = ""
 
@@ -65,7 +99,7 @@ class Space extends React.Component {
     }
 
   return (
-		<div
+		connectDropTarget(<div
 			style={{
         display: 'flex',
         justifyContent: 'center',
@@ -78,8 +112,21 @@ class Space extends React.Component {
 		>
 			{type}
 		</div>
-	)
+	))
   }
 }
+
+const mapStateToProps = state => {
+  return {}
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    currSpace: (space) => dispatch(currSpace(space))
+  }
+}
+
+Space = DropTarget('tile', spaceTarget, collect)(Space);
+Space = connect(mapStateToProps, mapDispatchToProps)(Space);
 
 export default Space;

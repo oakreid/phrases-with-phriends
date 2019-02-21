@@ -1,11 +1,11 @@
-.container {
+.board {
   text-align: center;
   display: grid;
-  grid-template-columns: repeat(15, 1fr);
+  grid-template-columns: repeat(15, 0fr);
 }
 
 .tile {
-  display: flex;
+  display: inline-block;
   justify-content: center;
   align-items: center;
   background-color: yellow;
