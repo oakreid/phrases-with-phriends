@@ -9,12 +9,15 @@ const tileSource = {
     return {
       tile: props.tile,
       board: props.board,
-      onDrop: props.onDrop
+      onDrop: props.onDrop,
+      idx: props.idx
     };
   },
   endDrag(props, monitor) {
-    if (monitor.didDrop())
-      props.onDrop();
+    if (monitor.didDrop()) {
+      console.log(props)
+      props.onDrop(props.idx);
+    }
   }
 };
 

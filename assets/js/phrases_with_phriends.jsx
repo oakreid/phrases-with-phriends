@@ -93,8 +93,8 @@ class PhrasesWithPhriends extends React.Component {
     });
   }
 
-  handleDrop() {
-    this.props.updateBoard(this.state.board);
+  handleDrop(idx) {
+    this.props.updateBoard(idx);
 
     const { board } = store.getState().reducer
 
@@ -103,6 +103,10 @@ class PhrasesWithPhriends extends React.Component {
     });
 
     this.grid = board.reshape(15, 15);
+  }
+
+  handleClick() {
+
   }
 
   render() {
@@ -116,7 +120,8 @@ class PhrasesWithPhriends extends React.Component {
             player={player}
             turn={turn}
             channel={this.channel}
-            onDrop={this.handleDrop.bind(this, board)}
+            onDrop={this.handleDrop.bind(this)}
+            onClick={this.handleClick.bind(this)}
           />
         </div>
       );

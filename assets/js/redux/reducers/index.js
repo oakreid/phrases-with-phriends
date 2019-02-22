@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import _ from 'lodash';
 
 const initialState = {
   board: [],
@@ -10,11 +11,17 @@ const initialState = {
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case 'UPDATE_BOARD':
-      let { board } = state;
+      let { board, player } = state;
+      let { hand } = player;
+      const { idx } = action;
+      console.log(idx)
+      hand = hand.filter((item, i) => i !== idx)
+      player.hand = hand;
       board[state.space] = state.tile;
       return {
         ...state,
-        board
+        board,
+        player
       };
     case 'CURR_TILE':
       const { tile } = action;
