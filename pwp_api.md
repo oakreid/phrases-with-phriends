@@ -4,7 +4,7 @@
 #### Server Expects:
 {} <empty payload>
 
-#### Server Replies (to the player that just joined):
+#### Server Replies (to the player that just joined) "ok":
 {  
 	player:  
 	{  
@@ -25,7 +25,7 @@
 	hand: <list of string, tiles that currently remain in the hand of the player who just submitted the word>  
 }  
 
-#### Server Replies (to the player that submitted):
+#### Server Replies (to the player that submitted) via "ok":
 {  
 	scores: <list of int, player scores in sequential order (i.e. player 1 score in index 0, player 2 score in index 1, etc.)>,  
 	player:  
@@ -36,7 +36,7 @@
 	turn: <int, the number of the player whose turn it is now>  
 }  
 
-#### Server Broadcasts (to the rest of the players):
+#### Server Broadcasts (to the rest of the players) via "other_submit":
 {  
 	board: <list of string(?), new board state with the word that the submitter added>,  
 	scores: <list of int, player scores in sequential order (i.e. player 1 score in index 0, player 2 score in index 1, etc.)>,  
@@ -47,10 +47,10 @@
 #### Server Expects:
 {} <empty payload>  
 
-#### Server Replies:
+#### Server Replies via "ok":
 {} <empty payload>  
 
-#### Server Broadcasts (to all players except the one that disconnected):
+#### Server Broadcasts (to all players except the one that disconnected) "player_disconnected":
 {  
 	scores: <list of int, player scores in sequential order (i.e. player 1 score in index 0, player 2 score in index 1, etc.)>,    
 	turn: whose\_turn: <int, the number of the player whose turn it is now, just in case it was the turn of the player who disconnected>  
