@@ -74,7 +74,7 @@ class Game extends React.Component {
               <Tile tile={tile} idx={i} board={board} onDrop={this.props.onDrop} key={i}/>
             )}</div>
           </div>
-          <button type="button">Submit</button>
+          <button type="button" onClick={this.props.handleClick}>Submit</button>
         </div>
     );
   }

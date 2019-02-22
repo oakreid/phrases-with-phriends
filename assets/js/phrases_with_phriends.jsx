@@ -106,7 +106,12 @@ class PhrasesWithPhriends extends React.Component {
   }
 
   handleClick() {
-
+    console.log("pillies")
+    this.channel.push("submit", {
+      word_value: 0,
+      new_board: this.state.board,
+      hand: this.state.player.hand,
+    }).receive("ok", this.set_view.bind(this))
   }
 
   render() {
@@ -121,8 +126,14 @@ class PhrasesWithPhriends extends React.Component {
             turn={turn}
             channel={this.channel}
             onDrop={this.handleDrop.bind(this)}
-            onClick={this.handleClick.bind(this)}
           />
+          <button type="button" onClick={() => {
+            this.channel.push("submit", {
+              word_value: 0,
+              new_board: this.state.board,
+              hand: this.state.player.hand,
+            }).receive("ok", this.set_view.bind(this))
+          }}>Submit</button>
         </div>
       );
     } else {
