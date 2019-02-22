@@ -40,11 +40,10 @@ defmodule PhrasesWithPhriends.Game do
 
   def update_submit(game, payload, player_num) do
     new_turn = progress_turn(game, player_num)
-
-    new_player_score = Enum.at(game[:scores], player_num) + payload[:word_value]
+    new_player_score = Enum.at(game[:scores], player_num) + payload["word_value"]
     new_scores = List.replace_at(game[:scores], player_num, new_player_score)
 
-    amt_missing_from_hand = 7 - length(payload[:hand])
+    amt_missing_from_hand = 7 - length(payload["hand"])
     new_hand = Enum.slice(game[:tile_bag], 0, amt_missing_from_hand)
     new_hands = List.replace_at(game[:hands], player_num, new_hand)
     new_tile_bag = Enum.slice(game[:tile_bag], amt_missing_from_hand, 999999)
@@ -52,7 +51,7 @@ defmodule PhrasesWithPhriends.Game do
     %{
       tile_bag: new_tile_bag,
       turn: new_turn,
-      board: payload[:new_board],
+      board: payload["new_board"],
       number_of_players: game[:number_of_players],
       hands: new_hands,
       scores: new_scores,

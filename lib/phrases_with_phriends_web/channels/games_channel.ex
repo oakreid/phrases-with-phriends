@@ -47,23 +47,24 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
     game = PhrasesWithPhriends.Game.update_submit(socket.assigns[:game], payload, num)
     socket = assign(socket, :game, game)
     PhrasesWithPhriends.BackupAgent.put(name, game)
+    new_hand = Enum.at(game.hands, num)
     others_new_state =
       %{
         board: game.board,
         scores: game.scores,
-        turn: game.whose_turn
+        turn: game.turn
       }
     sender_new_state =
       %{
         player: %{
           number: num,
-          hand: game.hands[num]
+          hand: new_hand
         },
         scores: game.scores,
-        turn: game.whose_turn
+        turn: game.turn
       }
     broadcast_from(socket, "other_submit", others_new_state)
-    {:reply, {:ok, sender_new_state, socket}}
+    {:reply, {:ok, sender_new_state}, socket}
   end
 
   def handle_in("disconnect", _payload, socket) do
@@ -74,10 +75,10 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
     PhrasesWithPhriends.BackupAgent.put(name, game)
     others_new_state = %{
       scores: game.scores,
-      turn: game.whose_turn
+      turn: game.turn
     }
     broadcast_from(socket, "player_disconnected", others_new_state)
-    {:reply, {:ok, %{}, socket}}
+    {:reply, {:ok, %{}}, socket}
   end
 
   # Add authorization logic here as required.
