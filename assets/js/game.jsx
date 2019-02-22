@@ -43,12 +43,15 @@ class Game extends React.Component {
   }
 
   drawBoard() {
-    let { board } = this.props;
+    let { board, validMove, turns, onDrop } = this.props;
 
     return board.map((tile, i) =>
       <Space row={Math.floor(i/15) + 1}
               col={(i%15) + 1}
               board={board}
+              validMove={validMove}
+              onDrop={onDrop}
+              turns={turns}
               tile={tile}
               space={i}
               key={i} />
@@ -71,7 +74,7 @@ class Game extends React.Component {
               <Tile tile={tile} board={board} onDrop={this.props.onDrop} key={space}/>
             )}</div>
           </div>
-          <button type="button">Click Me!</button>
+          <button type="button">Submit</button>
         </div>
     );
   }

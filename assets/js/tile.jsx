@@ -12,10 +12,12 @@ const tileSource = {
       onDrop: props.onDrop
     };
   },
-  endDrag(props, monitor) {
-    if (monitor.didDrop())
-      props.onDrop();
-  }
+  // endDrag(props, monitor) {
+  //   if (monitor.didDrop()) {
+  //     console.log('fuck');
+  //     props.onDrop();
+  //   }
+  // }
 };
 
 function collect(connect, monitor) {

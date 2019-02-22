@@ -53,9 +53,9 @@ class PhrasesWithPhriends extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this.channel.push("disconnect", {}).receive("ok", this.set_view.bind(this));
-  }
+  // componentWillUnmount() {
+  //   this.channel.push("disconnect", {}).receive("ok", this.set_view.bind(this));
+  // }
 
   set_view(view) {
     let { board, player, scores, turn } = view;
@@ -75,8 +75,20 @@ class PhrasesWithPhriends extends React.Component {
     this.grid = board.reshape(15, 15);
   }
 
-  handleDrop() {
-    this.props.updateBoard(this.state.board);
+  validMove(row, col) {
+    this.grid = this.state.board.reshape(15, 15);
+    if (this.grid) {
+      return (!!this.grid[col][row + 1] ||
+              !!this.grid[col][row - 1] ||
+              !!this.grid[col + 1][row] ||
+              !!this.grid[col - 1][row])
+    } else {
+      return true;
+    }
+  }
+
+  handleDrop(space) {
+    this.props.updateBoard(this.state.board, space);
 
     const { board } = store.getState().reducer
 
@@ -97,8 +109,10 @@ class PhrasesWithPhriends extends React.Component {
             scores={scores}
             player={player}
             turn={turn}
+            turns={this.turns}
             channel={this.channel}
-            onDrop={this.handleDrop.bind(this, board)}
+            onDrop={this.handleDrop.bind(this)}
+            validMove={this.validMove.bind(this)}
           />
         </div>
       );

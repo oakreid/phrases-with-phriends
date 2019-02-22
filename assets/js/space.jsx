@@ -10,11 +10,14 @@ import {currSpace} from './redux/actions';
 
 const spaceTarget = {
   canDrop(props) {
-    return !props.tile;
+    const valid = (props.validMove(props.row - 1, props.col - 1) ||
+                  (props.turns === 0 && props.row === 8 && props.col === 8)) &&
+                  !props.tile;
+    return valid;
   },
 
   drop(props) {
-    props.currSpace(props.space);
+    props.onDrop(props.space);
   }
 };
 
@@ -29,6 +32,10 @@ function collect(connect, monitor) {
 
 
 class Space extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
 
   renderOverlay(color) {
     return (

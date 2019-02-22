@@ -1,6 +1,7 @@
-export const updateBoard = (state) => {
+export const updateBoard = (space) => {
   return {
-    type: 'UPDATE_BOARD'
+    type: 'UPDATE_BOARD',
+    space
   }
 }
 

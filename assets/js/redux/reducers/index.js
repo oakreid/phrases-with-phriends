@@ -11,7 +11,8 @@ const reducer = (state=initialState, action) => {
   switch (action.type) {
     case 'UPDATE_BOARD':
       let { board } = state;
-      board[state.space] = state.tile;
+      const { space } = action;
+      board[space] = state.tile;
       return {
         ...state,
         board
@@ -21,12 +22,6 @@ const reducer = (state=initialState, action) => {
       return {
         ...state,
         tile
-      };
-    case 'CURR_SPACE':
-      const { space } = action;
-      return {
-        ...state,
-        space
       };
     case 'GAME_STATE':
       return action.data;
