@@ -6,6 +6,7 @@ const initialState = {
   player: {},
   scores: [],
   turn: 0,
+  tiles_played: []
 }
 
 const reducer = (state=initialState, action) => {
@@ -30,12 +31,18 @@ const reducer = (state=initialState, action) => {
       };
     case 'CURR_SPACE':
       const { space } = action;
+      let {tiles_played} = state;
+      tiles_played.push(space);
       return {
         ...state,
-        space
+        space,
+        tiles_played
       };
     case 'GAME_STATE':
-      return action.data;
+      return {
+        ...state,
+        ...action.data
+      };
     default:
       return state
   }

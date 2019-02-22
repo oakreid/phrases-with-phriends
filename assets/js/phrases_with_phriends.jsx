@@ -5,8 +5,40 @@ import {Provider, connect} from 'react-redux';
 import {createStore} from 'redux';
 import { gameState, updateBoard, getBoard } from './redux/actions';
 import rootReducer from './redux/reducers';
+import { writeFileSync, readFileSync } from 'fs';
+import {checkWord} from 'check-word';
 
 const store = createStore(rootReducer);
+
+const tileVals = {
+  ' ': 0,
+  'E': 1,
+  'A': 1,
+  'I': 1,
+  'O': 1,
+  'N': 1,
+  'R': 1,
+  'T': 1,
+  'L': 1,
+  'S': 1,
+  'U': 1,
+  'D': 2,
+  'G': 2,
+  'B': 3,
+  'C': 3,
+  'M': 3,
+  'P': 3,
+  'F': 4,
+  'H': 4,
+  'V': 4,
+  'W': 4,
+  'Y': 4,
+  'K': 5,
+  'J': 8,
+  'X': 8,
+  'Q': 10,
+  'Z': 10,
+}
 
 Array.prototype.reshape = function(rows, cols) {
   var copy = this.slice(0); // Copy all elements.
@@ -43,7 +75,7 @@ class PhrasesWithPhriends extends React.Component {
     super(props);
     this.channel = props.channel;
     this.state = {
-      board: []
+      board: [],
     };
     this.grid = [];
     if (!hasBeenJoined) {
@@ -83,7 +115,7 @@ class PhrasesWithPhriends extends React.Component {
       board,
       player,
       scores,
-      turn
+      turn,
     });
     this.setState({
       board,
@@ -113,7 +145,12 @@ class PhrasesWithPhriends extends React.Component {
     }).receive("ok", this.set_view.bind(this))
   }
 
+  calcScore(played) {
+    score =
+  }
+
   submit() {
+    let {tiles_played} = store.getState().reducer;
     this.channel.push("submit", {word_value: 2454345, board: this.board, hand: ["f"]}).receive("ok", this.set_view.bind(this));
   }
 
