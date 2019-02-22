@@ -59,16 +59,20 @@ class Game extends React.Component {
 
   render() {
 
-    let {player, board} = this.props;
+    let {player, board, turn, scores } = this.props;
 
     return (
       <div>
-        <div className="board">{this.drawBoard()}</div>
-        <div>{
-          player.hand.map((tile, space) =>
-            <Tile tile={tile} board={board} onDrop={this.props.onDrop} key={space}/>
-        )}</div>
-      </div>
+        <p>{'Player ' + (turn + 1) + '\'s turn'}</p>
+        <div className="container">
+          <div className="board">{this.drawBoard()}</div>
+          <div>{
+            player.hand.map((tile, space) =>
+              <Tile tile={tile} board={board} onDrop={this.props.onDrop} key={space}/>
+            )}</div>
+          </div>
+          <button type="button">Click Me!</button>
+        </div>
     );
   }
 }

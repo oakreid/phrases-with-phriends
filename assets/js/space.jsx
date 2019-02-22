@@ -9,9 +9,9 @@ import {currSpace} from './redux/actions';
 
 
 const spaceTarget = {
-  // canDrop(props) {
-  //   return true;
-  // },
+  canDrop(props) {
+    return !props.tile;
+  },
 
   drop(props) {
     props.currSpace(props.space);

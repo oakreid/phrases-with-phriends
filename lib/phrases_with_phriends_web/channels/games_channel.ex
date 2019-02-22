@@ -2,7 +2,7 @@ defmodule PhrasesWithPhriendsWeb.GamesChannel do
   use PhrasesWithPhriendsWeb, :channel
 
   def join("games:" <> name, _payload, socket) do
-    if authorized?(name) do
+    if true do
       game = PhrasesWithPhriends.BackupAgent.get(name) || PhrasesWithPhriends.Game.new_game()
       game = Map.put(game, :number_of_players, game[:number_of_players] + 1)
       num = game[:number_of_players] - 1

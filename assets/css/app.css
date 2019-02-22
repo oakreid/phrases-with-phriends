@@ -13,3 +13,7 @@
   height: 40px;
   border-style: solid;
 }
+
+.container {
+  display: inline-block;
+}

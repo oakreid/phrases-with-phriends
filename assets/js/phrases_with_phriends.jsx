@@ -41,6 +41,7 @@ class PhrasesWithPhriends extends React.Component {
 
   constructor(props) {
     super(props);
+    this.turns = 0;
     this.channel = props.channel;
     this.state = {
       board: []
@@ -50,6 +51,10 @@ class PhrasesWithPhriends extends React.Component {
       hasBeenJoined = true;
       this.channel.join().receive("ok", this.set_view.bind(this)).receive("error", res => { console.log("Unable to join", res)});
     }
+  }
+
+  componentWillUnmount() {
+    this.channel.push("disconnect", {}).receive("ok", this.set_view.bind(this));
   }
 
   set_view(view) {
@@ -67,6 +72,7 @@ class PhrasesWithPhriends extends React.Component {
       scores,
       turn
     });
+    this.grid = board.reshape(15, 15);
   }
 
   handleDrop() {
