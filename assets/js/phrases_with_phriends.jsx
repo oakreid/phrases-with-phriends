@@ -48,6 +48,30 @@ class PhrasesWithPhriends extends React.Component {
     this.grid = [];
     if (!hasBeenJoined) {
       hasBeenJoined = true;
+      this.channel.on("other_submit", payload => {
+        let { board, scores, turn } = payload;
+        this.props.gameState({
+          board,
+          scores,
+          turn
+        });
+        this.setState({
+          board,
+          scores,
+          turn
+        });
+      });
+      this.channel.on("player_disconnected", payload => {
+        let { scores, turn } = payload;
+        this.props.gameState({
+          scores,
+          turn
+        });
+        this.setState({
+          scores,
+          turn
+        });
+      });
       this.channel.join().receive("ok", this.set_view.bind(this)).receive("error", res => { console.log("Unable to join", res)});
     }
   }
