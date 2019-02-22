@@ -109,19 +109,15 @@ class PhrasesWithPhriends extends React.Component {
   }
 
   set_view(view) {
-    let { board, player, scores, turn } = view;
+    let { player } = view;
     player.hand = player.hand.map(val => String.fromCharCode(val))
     this.props.gameState({
-      board,
-      player,
-      scores,
-      turn,
+      ...view,
+      player
     });
     this.setState({
-      board,
-      player,
-      scores,
-      turn
+      ...view,
+      player
     });
   }
 
@@ -146,18 +142,26 @@ class PhrasesWithPhriends extends React.Component {
   }
 
   calcScore(played) {
-    score =
+    score = 0;
+    seen = []
+    played.map(space => {
+      let x = space / 15
+      let y = space % 15
+      while (x >= 0 && !seen.includes(15 * y + x)) {
+        seen.push(15 * y * x)
+      }
+    })
   }
 
   submit() {
-    let {tiles_played} = store.getState().reducer;
-    this.channel.push("submit", {word_value: 2454345, board: this.board, hand: ["f"]}).receive("ok", this.set_view.bind(this));
+    let {tiles_played, board, player} = store.getState().reducer;
+    this.channel.push("submit", {word_value: 2454345, new_board: board, hand: player.hand}).receive("ok", this.set_view.bind(this));
   }
 
   render() {
     this.submit = this.submit.bind(this)
 
-    if (this.state.board.length > 0) {
+    if (!!this.state.board && this.state.board.length > 0) {
       let { board, scores, player, turn } = this.state;
       return (
         <div>
