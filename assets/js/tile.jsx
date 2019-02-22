@@ -15,7 +15,6 @@ const tileSource = {
   },
   endDrag(props, monitor) {
     if (monitor.didDrop()) {
-      console.log(props)
       props.onDrop(props.idx);
     }
   }
@@ -29,6 +28,7 @@ function collect(connect, monitor) {
 }
 
 class Tile extends React.Component {
+
     render() {
     const { tile, connectDragSource, isDragging } = this.props;
     return connectDragSource(

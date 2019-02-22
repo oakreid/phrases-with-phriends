@@ -106,7 +106,6 @@ class PhrasesWithPhriends extends React.Component {
   }
 
   handleClick() {
-    console.log("pillies")
     this.channel.push("submit", {
       word_value: 0,
       new_board: this.state.board,
@@ -114,7 +113,13 @@ class PhrasesWithPhriends extends React.Component {
     }).receive("ok", this.set_view.bind(this))
   }
 
+  submit() {
+    this.channel.push("submit", {word_value: 2454345, board: this.board, hand: ["f"]}).receive("ok", this.set_view.bind(this));
+  }
+
   render() {
+    this.submit = this.submit.bind(this)
+
     if (this.state.board.length > 0) {
       let { board, scores, player, turn } = this.state;
       return (
@@ -127,13 +132,7 @@ class PhrasesWithPhriends extends React.Component {
             channel={this.channel}
             onDrop={this.handleDrop.bind(this)}
           />
-          <button type="button" onClick={() => {
-            this.channel.push("submit", {
-              word_value: 0,
-              new_board: this.state.board,
-              hand: this.state.player.hand,
-            }).receive("ok", this.set_view.bind(this))
-          }}>Submit</button>
+          <button onClick={() => this.submit()}>Submit</button>
         </div>
       );
     } else {
@@ -141,6 +140,7 @@ class PhrasesWithPhriends extends React.Component {
     }
   }
 }
+
 
 const mapStateToProps = state => {
   return {

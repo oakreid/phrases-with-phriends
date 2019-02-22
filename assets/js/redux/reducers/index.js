@@ -14,7 +14,6 @@ const reducer = (state=initialState, action) => {
       let { board, player } = state;
       let { hand } = player;
       const { idx } = action;
-      console.log(idx)
       hand = hand.filter((item, i) => i !== idx)
       player.hand = hand;
       board[state.space] = state.tile;
