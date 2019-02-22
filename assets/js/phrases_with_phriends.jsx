@@ -142,20 +142,46 @@ class PhrasesWithPhriends extends React.Component {
   }
 
   calcScore(played) {
-    score = 0;
-    seen = []
+    let score = 0;
+    let seen = []
     played.map(space => {
-      let x = space / 15
+      let x = Math.floor(space / 15)
       let y = space % 15
-      while (x >= 0 && !seen.includes(15 * y + x)) {
-        seen.push(15 * y * x)
+      let horizontal = [this.grid[y][x]]
+      seen.push(15 * y * x);
+      x -= 1;
+      while (x >= 0 && !seen.includes(15 * y + x) && !!this.grid[y][x]) {
+        seen.push(15 * y * x);
+        horizontal.unshift(this.grid[y][x])
+        x -= 1;
       }
+      x = Math.floor(space / 15)
+      while (x <= 15 && !seen.includes(15 * y + x) && !!this.grid[y][x]) {
+        seen.push(15 * y * x);
+        horizontal.push(this.grid[y][x])
+        x += 1;
+      }
+      x = Math.floor(space / 15)
+      let vertical = []
+      while (y >= 0 && !seen.includes(15 * y + x) && !!this.grid[y][x]) {
+        seen.push(15 * y * x);
+        vertical.unshift(this.grid[y][x])
+        y -= 1;
+      }
+      y = space % 15;
+      while (y <= 15 && !seen.includes(15 * y + x) && !!this.grid[y][x]) {
+        seen.push(15 * y * x);
+        vertical.push(this.grid[y][x])
+        y += 1;
+      }
+      console.log(horizontal.join(""), vertical.join(""));
     })
   }
 
   submit() {
     let {tiles_played, board, player} = store.getState().reducer;
-    this.channel.push("submit", {word_value: 2454345, new_board: board, hand: player.hand}).receive("ok", this.set_view.bind(this));
+    this.calcScore.bind(this);
+    this.channel.push("submit", {word_value: this.calcScore(tiles_played), new_board: board, hand: player.hand}).receive("ok", this.set_view.bind(this));
   }
 
   render() {

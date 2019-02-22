@@ -38,7 +38,6 @@ class Game extends React.Component {
 
     return (
       <div>
-        <p>{'Player ' + (turn + 1) + '\'s turn'}</p>
         <div className="container">
           <div className="board">{this.drawBoard()}</div>
           <div>{

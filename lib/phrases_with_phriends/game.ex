@@ -44,7 +44,7 @@ defmodule PhrasesWithPhriends.Game do
     new_scores = List.replace_at(game[:scores], player_num, new_player_score)
 
     amt_missing_from_hand = 7 - length(payload["hand"])
-    new_hand = Enum.slice(game[:tile_bag], 0, amt_missing_from_hand) ++ payload['hand']
+    new_hand = Enum.slice(game[:tile_bag], 0, amt_missing_from_hand) ++ payload["hand"]
     new_hands = List.replace_at(game[:hands], player_num, new_hand)
     new_tile_bag = Enum.slice(game[:tile_bag], amt_missing_from_hand, 999999)
 
